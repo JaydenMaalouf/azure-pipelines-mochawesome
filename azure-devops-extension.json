@@ -1,0 +1,44 @@
+{
+  "manifestVersion": 1,
+  "id": "allure-reporter",
+  "publisher": "JaydenMaalouf",
+  "version": "1.0.0",
+  "name": "Allure Reporter",
+  "description": "Azure DevOps Extension",
+  "categories": [
+    "Azure Repos",
+    "Azure Boards",
+    "Azure Pipelines",
+    "Azure Test Plans",
+    "Azure Artifacts"
+  ],
+  "targets": [
+    {
+      "id": "Microsoft.VisualStudio.Services"
+    }
+  ],
+  "files": [
+    {
+      "path": "static",
+      "addressable": true
+    },
+    {
+      "path": "dist",
+      "addressable": true
+    }
+  ],
+  "contributions": [
+    {
+      "id": "pipeline-allure-tab",
+      "type": "ms.vss-build-web.build-results-tab",
+      "description": "Embed Allure HTML report in Azure Pipelines Build",
+      "targets": [
+        "ms.vss-build-web.build-results-view"
+      ],
+      "properties": {
+        "name": "Allure",
+        "uri": "dist/tabContent.html"
+      }
+    }
+  ]
+}
