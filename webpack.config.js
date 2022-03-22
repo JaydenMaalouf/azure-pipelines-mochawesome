@@ -3,22 +3,22 @@ const fs = require("fs");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
-    entry: "./temp.js",
-    output: {
-        filename: "[name]/[name].js"
-    },
-    resolve: {
-        extensions: [".js"],
-    },
-    stats: {
-        warnings: false
-    },
-    module: {
-        rules: [
-            
-        ]
-    },
-    plugins: [
-        new CopyWebpackPlugin([ { from: "**/*.html", context: "src/" }])
+  entry: "./temp.js",
+  output: {
+    filename: "[name]/[name].js"
+  },
+  resolve: {
+    extensions: [".js"],
+  },
+  stats: {
+    warnings: false
+  },
+  module: {
+    rules: [
+      
     ]
+  },
+  plugins: [
+    new CopyWebpackPlugin([ { from: "**/*.html", context: "src/" }])
+  ]
 };
