@@ -1,6 +1,6 @@
 {
   "name": "allure-reporter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Allure Reporter",
   "keywords": [
     "extensions",
@@ -14,7 +14,8 @@
   },
   "scripts": {
     "clean": "rimraf ./dist",
-    "compile": "npm run clean && npm run test && webpack --mode production",
+    "compile": "npm run clean && npm run test && webpack --mode production && npm run compile:tasks",
+    "compile:tasks": "tsc -b ./tasks/UploadAllureReport/tsconfig.json",
     "compile:dev": "npm run clean && npm run test && webpack --mode development",
     "build": "npm run compile",
     "build:dev": "npm run compile:dev && npm run postbuild",

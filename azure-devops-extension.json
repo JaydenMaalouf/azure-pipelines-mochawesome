@@ -2,16 +2,10 @@
   "manifestVersion": 1,
   "id": "allure-reporter",
   "publisher": "JaydenMaalouf",
-  "version": "1.0.0",
+  "version": "1.0.6",
   "name": "Allure Reporter",
   "description": "Azure DevOps Extension",
-  "categories": [
-    "Azure Repos",
-    "Azure Boards",
-    "Azure Pipelines",
-    "Azure Test Plans",
-    "Azure Artifacts"
-  ],
+  "categories": ["Azure Pipelines"],
   "targets": [
     {
       "id": "Microsoft.VisualStudio.Services"
@@ -19,12 +13,7 @@
   ],
   "files": [
     {
-      "path": "static",
-      "addressable": true
-    },
-    {
-      "path": "dist",
-      "addressable": true
+      "path": "tasks/UploadAllureReport"
     }
   ],
   "contributions": [
@@ -37,7 +26,18 @@
       ],
       "properties": {
         "name": "Allure",
-        "uri": "dist/tabContent.html"
+        "uri": "dist/tabContent.html",
+        "registeredObjectId": "registerBuild",
+        "supportsTasks": ["2f1fb45f-1828-460a-8f2e-ec5c31c36241"],
+        "dynamic": true
+      }
+    },
+    {
+      "id": "UploadAllureReport",
+      "type": "ms.vss-distributed-task.task",
+      "targets": ["ms.vss-distributed-task.tasks"],
+      "properties": {
+        "name": "tasks/UploadAllureReport"
       }
     }
   ]

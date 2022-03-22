@@ -3,7 +3,7 @@ const fs = require("fs");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
-    entry: "./src/index.js",
+    entry: "./temp.js",
     output: {
         filename: "[name]/[name].js"
     },
