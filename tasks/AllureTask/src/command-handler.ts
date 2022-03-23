@@ -1,12 +1,7 @@
 import task = require("azure-pipelines-task-lib/task");
 import { AllureCommand } from "./commands";
 import { AllureToolHandler, IAllureToolHandler } from "./allure";
-import {
-  ToolRunner,
-  IExecOptions,
-  IExecSyncOptions,
-  IExecSyncResult,
-} from "azure-pipelines-task-lib/toolrunner";
+import { IExecOptions } from "azure-pipelines-task-lib/toolrunner";
 
 export class CommandHandler {
   allureToolHandler: IAllureToolHandler;

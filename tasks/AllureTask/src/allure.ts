@@ -8,19 +8,17 @@ export interface IAllureToolHandler {
 
 export class AllureToolHandler implements IAllureToolHandler {
   public createToolRunner(command?: AllureCommand): ToolRunner {
-    let allurePath;
+    let allurePath: string;
     try {
       allurePath = task.which("allure", true);
     } catch (err) {
-      throw new Error("Allure CLI not found.");
+      throw "Allure Commandline not found.";
     }
 
-    let allureToolRunner: ToolRunner = task.tool(allurePath);
-    if (command) 
-    {
+    const allureToolRunner: ToolRunner = task.tool(allurePath);
+    if (command) {
       allureToolRunner.arg(command.name);
-      if (command.additionalArgs) 
-      {
+      if (command.additionalArgs) {
         allureToolRunner.line(command.additionalArgs);
       }
     }

@@ -4,12 +4,18 @@ import { ToolRunner, IExecOptions } from "azure-pipelines-task-lib/toolrunner";
 
 async function run() {
   try {
-    const npmRunner = new ToolRunner("npm");
+    let npmPath: string;
+    try {
+      npmPath = task.which("npm", true);
+    } catch (err) {
+      throw "NPM not found.";
+    }
+
+    const npmRunner: ToolRunner = new ToolRunner(npmPath);
     npmRunner.arg(["install", "-g", "allure-commandline"]);
 
     const result = await npmRunner.exec();
-    if (result == 0)
-    {
+    if (result == 0) {
       task.setResult(TaskResult.Succeeded, "");
       return;
     }
