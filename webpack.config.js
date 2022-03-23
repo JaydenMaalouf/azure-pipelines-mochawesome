@@ -3,19 +3,29 @@ const fs = require("fs");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
-  entry: "./temp.js",
+  entry: {
+    tabContent: "./src/AllureReportTab/tabContent.tsx",
+  },
   output: {
-    filename: "[name]/[name].js"
+    filename: "AllureReportTab/tabContent.js"
   },
   resolve: {
-    extensions: [".js"],
+    extensions: [".ts", ".tsx", ".js"],
+    alias: {
+      "azure-devops-extension-sdk": path.resolve(
+        "node_modules/azure-devops-extension-sdk"
+      ),
+    }
   },
   stats: {
     warnings: false
   },
   module: {
     rules: [
-      
+      {
+        test: /\.tsx?$/,
+        loader: "ts-loader",
+      }      
     ]
   },
   plugins: [

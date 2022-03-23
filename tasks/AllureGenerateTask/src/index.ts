@@ -3,7 +3,6 @@ import fs = require("fs");
 import path = require("path");
 import { TaskResult } from "azure-pipelines-task-lib/task";
 import { IExecOptions } from "azure-pipelines-task-lib/toolrunner";
-import { stringify } from "querystring";
 
 async function run() {
   try {
@@ -14,13 +13,13 @@ async function run() {
       throw "Allure Commandline not found.";
     }
 
-    let allureTool = task.tool(allurePath);
-    let outputDirectory = task.getInput("outputDirectory");
+    const allureTool = task.tool(allurePath);
+    const outputDirectory = task.getInput("outputDirectory");
     allureTool.arg(["generate"]);
     allureTool.argIf(outputDirectory, ["-o", outputDirectory]);
 
-    let workingDirectory = task.getInput("workingDirectory");
-    let result = await allureTool.exec(<IExecOptions>{
+    const workingDirectory = task.getInput("workingDirectory");
+    const result = await allureTool.exec(<IExecOptions>{
       cwd: workingDirectory,
     });
     if (result != 0) {
@@ -28,13 +27,17 @@ async function run() {
     }
 
     if (outputDirectory) {
-      let files = getAllFiles(outputDirectory);
+      const files = getAllFiles(outputDirectory);
       files.forEach((file) => {
-        task.addAttachment("allure.report", "output", file);
+        const relativeFile = path.relative(outputDirectory, file)
+        const b64EncodedFile = Buffer.from(relativeFile).toString('base64')
+        task.addAttachment("allure.report", b64EncodedFile, file);
       });
     }
+
+    task.setResult(TaskResult.Succeeded, "");
   } catch (error) {
-    task.setResult(task.TaskResult.Failed, error);
+    task.setResult(TaskResult.Failed, error);
   }
 }
 
@@ -43,11 +46,11 @@ function getAllFiles (dirPath: string, arrayOfFiles?: string[]) {
 
   arrayOfFiles = arrayOfFiles || [];
 
-  files.forEach(function (file) {
-    if (fs.statSync(dirPath + "/" + file).isDirectory()) {
+  files.forEach((file) => {
+    if (fs.statSync(path.join(dirPath, file)).isDirectory()) {
       arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles);
     } else {
-      arrayOfFiles.push(path.join(__dirname, dirPath, "/", file));
+      arrayOfFiles.push(path.join(dirPath, file));
     }
   });
 
