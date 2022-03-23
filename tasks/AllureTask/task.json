@@ -1,8 +1,8 @@
 {
   "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
   "id": "2f1fb45f-1828-460a-8f2e-ec5c31c36241",
-  "name": "UploadAllureReport",
-  "friendlyName": "Upload Allure Report",
+  "name": "AllureTask",
+  "friendlyName": "Allure Reporter Task",
   "description": "Used to upload the Allure HTML Report to Azure DevOps",
   "helpMarkDown": "",
   "category": "Utility",
@@ -10,10 +10,25 @@
   "version": {
     "Major": 0,
     "Minor": 1,
-    "Patch": 1
+    "Patch": 7
   },
   "instanceNameFormat": "echo $(samplestring)",
   "inputs": [
+      {
+        "name": "command",
+        "type": "pickList",
+        "label": "Command",
+        "defaultValue": "init",
+        "required": true,
+        "helpMarkDown": "The Allure command to execute.",
+        "options": {
+            "generate": "generate",
+            "upload": "upload"
+        },
+        "properties": {
+            "EditableOptions": "False"
+        }
+    },
     {
       "name": "workingDirectory",
       "type": "filePath",

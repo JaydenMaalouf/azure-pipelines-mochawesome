@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "allure-reporter",
   "publisher": "JaydenMaalouf",
-  "version": "1.0.8",
+  "version": "1.0.19",
   "name": "Allure Reporter",
   "description": "Azure DevOps Extension",
   "categories": [
@@ -15,7 +15,10 @@
   ],
   "files": [
     {
-      "path": "tasks/UploadAllureReport"
+      "path": "tasks/AllureTask"
+    },
+    {
+      "path": "tasks/AllureInstallerTask"
     },
     {
       "path": "dist",
@@ -41,13 +44,23 @@
       }
     },
     {
-      "id": "UploadAllureReport",
+      "id": "AllureTask",
       "type": "ms.vss-distributed-task.task",
       "targets": [
         "ms.vss-distributed-task.tasks"
       ],
       "properties": {
-        "name": "tasks/UploadAllureReport"
+        "name": "tasks/AllureTask"
+      }
+    },
+    {
+      "id": "AllureInstallerTask",
+      "type": "ms.vss-distributed-task.task",
+      "targets": [
+        "ms.vss-distributed-task.tasks"
+      ],
+      "properties": {
+        "name": "tasks/AllureInstallerTask"
       }
     }
   ]

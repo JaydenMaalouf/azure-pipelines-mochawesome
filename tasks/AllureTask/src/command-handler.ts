@@ -19,9 +19,9 @@ export class CommandHandler {
     return await this[command]();
   }
 
-  public async init(): Promise<number> {
+  public async generate(): Promise<number> {
     let initCommand = new AllureCommand(
-      "init",
+      "generate",
       task.getInput("workingDirectory"),
       task.getInput("commandOptions")
     );
