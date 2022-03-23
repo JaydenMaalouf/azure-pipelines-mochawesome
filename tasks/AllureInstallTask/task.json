@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
   "id": "0d6fcf3a-3a59-419c-8fed-5074acaf4699",
-  "name": "AllureInstallerTask",
+  "name": "AllureInstallTask",
   "friendlyName": "Allure CLI Installer Task",
   "description": "Used to upload the Allure HTML Report to Azure DevOps",
   "helpMarkDown": "",
@@ -10,7 +10,7 @@
   "version": {
     "Major": 0,
     "Minor": 1,
-    "Patch": 7
+    "Patch": 8
   },
   "instanceNameFormat": "echo $(samplestring)",
   "execution": {
