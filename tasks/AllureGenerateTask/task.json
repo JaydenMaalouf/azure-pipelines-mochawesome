@@ -1,0 +1,39 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+  "id": "2f1fb45f-1828-460a-8f2e-ec5c31c36241",
+  "name": "AllureGenerateTask",
+  "friendlyName": "Allure Generate Report Task",
+  "description": "Used to upload the Allure HTML Report to Azure DevOps",
+  "helpMarkDown": "",
+  "category": "Utility",
+  "author": "Jayden Maalouf",
+  "version": {
+    "Major": 0,
+    "Minor": 1,
+    "Patch": 10
+  },
+  "instanceNameFormat": "echo $(samplestring)",
+  "inputs": [
+    {
+      "name": "workingDirectory",
+      "type": "filePath",
+      "label": "Configuration directory",
+      "defaultValue": "$(System.DefaultWorkingDirectory)",
+      "helpMarkDown": "Directory containing the Allure report output. The default value is $(System.DefaultWorkingDirectory)",
+      "required": false
+    },
+    {
+      "name": "outputDirectory",
+      "type": "filePath",
+      "label": "Output directory",
+      "defaultValue": "$(System.DefaultWorkingDirectory)/allure-report",
+      "helpMarkDown": "Directory to push the generated Allure export to. The default value is $(System.DefaultWorkingDirectory)/allure-report",
+      "required": false
+    }
+  ],
+  "execution": {
+    "Node10": {
+      "target": "src/index.js"
+    }
+  }
+}

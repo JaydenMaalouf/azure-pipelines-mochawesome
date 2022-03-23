@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "allure-reporter",
   "publisher": "JaydenMaalouf",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "name": "Allure Reporter",
   "description": "Azure DevOps Extension",
   "categories": [
@@ -15,7 +15,7 @@
   ],
   "files": [
     {
-      "path": "tasks/AllureTask"
+      "path": "tasks/AllureGenerateTask"
     },
     {
       "path": "tasks/AllureInstallerTask"
@@ -44,13 +44,13 @@
       }
     },
     {
-      "id": "AllureTask",
+      "id": "AllureGenerateTask",
       "type": "ms.vss-distributed-task.task",
       "targets": [
         "ms.vss-distributed-task.tasks"
       ],
       "properties": {
-        "name": "tasks/AllureTask"
+        "name": "tasks/AllureGenerateTask"
       }
     },
     {

@@ -15,7 +15,7 @@
   "scripts": {
   "clean": "rimraf ./dist",
   "compile": "npm run clean && npm run test && webpack --mode production && npm run compile:tasks",
-  "compile:tasks": "tsc -b ./tasks/AllureTask/tsconfig.json ./tasks/AllureInstallerTask/tsconfig.json",
+  "compile:tasks": "tsc -b ./tasks/AllureGenerateTask/tsconfig.json ./tasks/AllureInstallerTask/tsconfig.json",
   "compile:dev": "npm run clean && npm run test && webpack --mode development",
   "build": "npm run compile",
   "build:dev": "npm run compile:dev && npm run postbuild",

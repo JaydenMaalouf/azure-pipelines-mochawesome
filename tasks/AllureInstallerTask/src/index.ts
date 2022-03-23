@@ -1,6 +1,6 @@
 import task = require("azure-pipelines-task-lib/task");
 import { TaskResult } from "azure-pipelines-task-lib/task";
-import { ToolRunner, IExecOptions } from "azure-pipelines-task-lib/toolrunner";
+import { ToolRunner } from "azure-pipelines-task-lib/toolrunner";
 
 async function run() {
   try {
