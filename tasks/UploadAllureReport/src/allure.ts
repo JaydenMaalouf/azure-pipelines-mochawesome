@@ -1,8 +1,12 @@
-import { ToolRunner } from "azure-pipelines-task-lib/toolrunner";
 import task = require("azure-pipelines-task-lib/task");
+import { ToolRunner } from "azure-pipelines-task-lib/toolrunner";
 import { AllureCommand } from "./commands";
 
-export class AllureToolRunner {
+export interface IAllureToolHandler {
+  createToolRunner(command?: AllureCommand): ToolRunner;
+}
+
+export class AllureToolHandler implements IAllureToolHandler {
   public createToolRunner(command?: AllureCommand): ToolRunner {
     let allurePath;
     try {

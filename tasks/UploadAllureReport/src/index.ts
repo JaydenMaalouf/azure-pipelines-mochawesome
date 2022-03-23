@@ -1,16 +1,18 @@
-import tl = require('azure-pipelines-task-lib/task');
+import task = require("azure-pipelines-task-lib/task");
+import { CommandHandler } from "./command-handler";
 
 async function run() {
+  let commandHandler = new CommandHandler();
   try {
-    const inputString: string | undefined = tl.getInput('samplestring', true);
-    if (inputString == 'bad') {
-      tl.setResult(tl.TaskResult.Failed, 'Bad input was given');
-      return;
+    let command = task.getInput("command");
+    if (command == undefined) {
+      throw "Bad Input Command";
     }
-    console.log('Hello', inputString);
-  }
-  catch (err) {
-    tl.setResult(tl.TaskResult.Failed, err.message);
+
+    let result = await commandHandler.execute(command);
+    task.setResult(task.TaskResult.Succeeded, "");
+  } catch (error) {
+    task.setResult(task.TaskResult.Failed, error);
   }
 }
 
