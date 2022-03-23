@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "allure-reporter",
   "publisher": "JaydenMaalouf",
-  "version": "1.0.33",
+  "version": "1.0.34",
   "name": "Allure Reporter",
   "description": "Azure DevOps Extension",
   "categories": [
@@ -12,6 +12,9 @@
     {
       "id": "Microsoft.VisualStudio.Services"
     }
+  ],  
+  "scopes": [
+    "vso.build_execute"
   ],
   "files": [
     {

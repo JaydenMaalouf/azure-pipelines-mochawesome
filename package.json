@@ -32,6 +32,7 @@
     "react-dom": "~16.13.1"
   },
   "devDependencies": {
+    "@types/node": "^17.0.22",
     "@types/react": "^17.0.42",
     "copy-webpack-plugin": "^4.5.4",
     "file-loader": "~2.0.0",

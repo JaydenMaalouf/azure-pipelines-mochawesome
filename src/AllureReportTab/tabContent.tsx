@@ -1,7 +1,7 @@
 import * as React from "react"
 import * as ReactDOM from "react-dom"
 import * as SDK from "azure-devops-extension-sdk";
-import { Build, BuildRestClient } from "azure-devops-extension-api/Build";
+import { Attachment, Build, BuildRestClient } from "azure-devops-extension-api/Build";
 import { getClient } from "azure-devops-extension-api";
 
 SDK.init();
@@ -32,6 +32,7 @@ function displayReports(attachmentClient: BuildAttachmentClient) {
 
 class BuildAttachmentClient {
   private build: Build;
+  private authHeaders: Object = undefined;
 
   constructor(build: Build) {
     this.build = build;
@@ -50,11 +51,31 @@ class BuildAttachmentClient {
   public async init() {
     console.log("Get attachment list");
     const buildClient: BuildRestClient = getClient(BuildRestClient);
-    let attachments = await buildClient.getAttachments(
+    let attachments: Attachment[] = await buildClient.getAttachments(
       this.build.project.id,
       this.build.id,
       "allure.report"
     );
+    
     console.log(attachments);
+  }
+
+  private async getAuthHeaders(): Promise<Object> {
+    if (this.authHeaders === undefined) {
+      console.log('Get access token')
+      const accessToken = await SDK.getAccessToken()
+      const b64encodedAuth = Buffer.from(':' + accessToken).toString('base64')
+      this.authHeaders = { headers: {'Authorization': 'Basic ' + b64encodedAuth} }
+    }
+    return this.authHeaders
+  }
+
+  public async downloadAttachment(attachment: Attachment): Promise<string> {
+    const headers = await this.getAuthHeaders();
+    const response = await fetch(attachment._links.self.href, headers);
+    if (!response.ok) {
+      throw new Error(response.statusText)
+    }
+    return await response.text()
   }
 }
