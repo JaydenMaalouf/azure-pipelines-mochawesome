@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "allure-reporter",
   "publisher": "JaydenMaalouf",
-  "version": "1.0.63",
+  "version": "1.0.78",
   "name": "Allure Reporter",
   "description": "Azure DevOps Extension",
   "categories": [

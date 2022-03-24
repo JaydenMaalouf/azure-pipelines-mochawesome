@@ -12,11 +12,11 @@ async function run() {
   }
 
   const allureTool = task.tool(allurePath);
-  const outputDirectory = task.getInput("outputDirectory");
+  const outputDirectory = task.getPathInput("outputDirectory");
   allureTool.arg(["generate"]);
   allureTool.argIf(outputDirectory, ["-o", outputDirectory]);
 
-  const workingDirectory = task.getInput("workingDirectory");
+  const workingDirectory = task.getPathInput("workingDirectory");
   const result = await allureTool.exec(<IExecOptions>{
     cwd: workingDirectory,
   });
@@ -27,6 +27,7 @@ async function run() {
   if (outputDirectory) {
     let allureGen = new AllureGenerator(outputDirectory, workingDirectory);
     //TODO: set this to staging artifacts directory
+    task.debug('Starting allure generation');
     let outputFile = allureGen.generate();
     console.log(`Output file generated: ${outputFile}`);
     task.addAttachment("allure.report", "index.html", outputFile);

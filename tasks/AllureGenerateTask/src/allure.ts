@@ -1,7 +1,7 @@
 import fs = require("fs");
 import path = require("path");
 import task = require("azure-pipelines-task-lib/task");
-import JSSoup from 'jssoup'; 
+import JSSoup from "jssoup";
 
 export class AllureGenerator {
   private workingDirectory: string;
@@ -146,7 +146,7 @@ export class AllureGenerator {
       jQuery.htmlPrefilter = function (v) {
         var regs = [
           /<a[^>]*href="(?<url>[^"]*)"[^>]*>/,
-          /<img[^>]*src="(?<url>[^"]*)"\/?>/,
+          /<img[^>]*src="(?<url>[^"]*)"\\/?>/,
         ];
     
         for (i in regs) {
@@ -177,22 +177,23 @@ export class AllureGenerator {
         content = `data:${element.mime};base64, ${rawContent}`;
       } else {
         content = element.content
-          .replace("\\", "\\\\")
-          .replace('"', '\\"')
-          .replace("\n", "\\n");
+          .replace(/\\/g, "\\\\")
+          .replace(/"/g, '\\"')
+          .replace(/\s/g, "");
       }
       fs.appendFileSync(serverJsPath, ` "${url}": "${content}", \n`);
     });
     fs.appendFileSync(serverJsPath, "};\n");
-    fs.appendFileSync(serverJsPath, "    var server = sinon.fakeServer.create();\n");
+    fs.appendFileSync(serverJsPath, "\nvar server = sinon.fakeServer.create();\n");
     data.forEach((element) => {
       let url = element.url;
       let contentType = element.mime;
-      fs.appendFileSync(serverJsPath, `
-        server.respondWith("GET", "{url}", [
-              200, { "Content-Type": "${contentType}" }, server_data["${url}"],
-        ]);
-      `);
+      fs.appendFileSync(
+        serverJsPath,
+        `\nserver.respondWith("GET", "${url}", [
+          200, { "Content-Type": "${contentType}" }, server_data["${url}"],
+        ]);`
+      );
     });
 
     fs.appendFileSync(serverJsPath, "server.autoRespond = true;");
@@ -204,12 +205,20 @@ export class AllureGenerator {
     let files = this.getAllFiles(this.workingDirectory);
     if (files) {
       files.forEach((file) => {
-        task.debug(`File: ${file}`);
+        let dirName = path.dirname(file);
+        task.debug(`dirName = ${dirName}`);
+        if (path.dirname(file) == this.workingDirectory){
+          return;
+        }
+
+        task.debug(`file = ${file}`);
+        let relativeFile = path.relative(this.workingDirectory, file);
+        task.debug(`relativeFile = ${relativeFile}`);
         let fileExtension = path.extname(file).replace(".", "");
         task.debug(`File Extension: ${fileExtension}`);
         if (!this.allowed_extensions.includes(fileExtension)) {
-          task.warning(
-            `WARNING: Unsupported extension: ${fileExtension} (file: ${file}) skipping (supported are: ${this.allowed_extensions.join(
+          task.debug(
+            `WARNING: Unsupported extension: ${fileExtension} (file: ${relativeFile}) skipping (supported are: ${this.allowed_extensions.join(
               ", "
             )}`
           );
@@ -217,9 +226,10 @@ export class AllureGenerator {
         }
 
         let content: string;
-        let mime =
-          this.content_types[fileExtension] ?? this.default_content_type;
+        let mime = this.content_types[fileExtension] ?? this.default_content_type;
+        task.debug(`mime = ${mime}`);
         let isBinaryFile = this.base64_extensions.includes(fileExtension);
+        task.debug(`isBinaryFile = ${isBinaryFile}`);
         if (isBinaryFile) {
           let fileContent = fs.readFileSync(file);
           content = Buffer.from(fileContent).toString("base64");
@@ -228,7 +238,7 @@ export class AllureGenerator {
           content = fileContent;
         }
 
-        data.push(new DataFile(file, mime, content, isBinaryFile));
+        data.push(new DataFile(relativeFile.replace(/\\/g, "/"), mime, content, isBinaryFile));
       });
     }
     return data;
