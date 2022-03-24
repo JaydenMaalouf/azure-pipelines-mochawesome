@@ -5,9 +5,10 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 module.exports = {
   entry: {
     tabContent: "./src/AllureReportTab/tabContent.tsx",
+    AllureTab: "./src/AllureReportTab/AllureTab.tsx"
   },
   output: {
-    filename: "AllureReportTab/tabContent.js"
+    filename: "AllureReportTab/[name].js"
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js"],

@@ -19,7 +19,6 @@
     ],
     "types": [
       "react",
-      "jest",
       "node"
     ],
     "allowJs": true,
@@ -36,6 +35,7 @@
     "src"
   ],
   "files": [
-    "src/AllureReportTab/tabContent.tsx"
+    "src/AllureReportTab/tabContent.tsx",
+    "src/AllureReportTab/AllureTab.tsx"
   ]
 }

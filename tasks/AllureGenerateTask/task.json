@@ -10,7 +10,7 @@
   "version": {
     "Major": 0,
     "Minor": 1,
-    "Patch": 18
+    "Patch": 41
   },
   "instanceNameFormat": "echo $(samplestring)",
   "inputs": [
@@ -28,6 +28,14 @@
       "label": "Output directory",
       "defaultValue": "$(System.DefaultWorkingDirectory)/allure-report",
       "helpMarkDown": "Directory to push the generated Allure export to. The default value is $(System.DefaultWorkingDirectory)/allure-report",
+      "required": false
+    },
+    {
+      "name": "publishResults",
+      "type": "boolean",
+      "label": "Publish Test Results",
+      "defaultValue": true,
+      "helpMarkDown": "Publish Allure Test results to Azure DevOps",
       "required": false
     }
   ],
