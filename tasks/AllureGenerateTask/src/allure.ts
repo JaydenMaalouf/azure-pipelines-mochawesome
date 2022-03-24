@@ -52,13 +52,13 @@ export class AllureGenerator {
     task.debug(`The server.js is built! Size is: ${serverJsStats.size} bytes`);
 
     task.debug("> Copying file sinon.js into folder...");
-    let sinonOutputPath = path.join(this.outputDirectory, "sinon.js");
+    let sinonOutputPath = path.join(this.workingDirectory, "sinon.js");
     task.cp(path.join(__dirname, "sinon.js"), sinonOutputPath);
     task.debug("The sinon.js has been copied");
 
     let indexPath = path.join(this.workingDirectory, "index.html");
     let htmlContent = fs.readFileSync(indexPath, "utf-8");
-    if (htmlContent.includes("sinon.js")) {
+    if (!htmlContent.includes("sinon.js")) {
       task.debug(
         "> Patching index.html file to make it use sinon.js and server.js"
       );
