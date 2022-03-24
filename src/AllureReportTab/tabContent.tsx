@@ -1,9 +1,13 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as SDK from "azure-devops-extension-sdk";
-import { Attachment, Build, BuildRestClient } from "azure-devops-extension-api/Build";
+import {
+  Attachment,
+  Build,
+  BuildRestClient,
+  BuildStatus,
+} from "azure-devops-extension-api/Build";
 import { getClient } from "azure-devops-extension-api";
-import { AllureTab } from "./AllureTab";
 
 SDK.init();
 SDK.ready().then(() => {
@@ -11,15 +15,20 @@ SDK.ready().then(() => {
     const config = SDK.getConfiguration();
     if (typeof config.onBuildChanged === "function") {
       config.onBuildChanged(async (build: Build) => {
-        let buildAttachmentClient = new BuildAttachmentClient(build);
-        buildAttachmentClient
-          .init()
-          .then(() => {
-            displayReports(buildAttachmentClient);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        if (build.status == BuildStatus.InProgress) {
+          document.getElementById("spinner").style.display = "none";
+          document.getElementById("progress-message").innerText = "Pipeline in progress, please wait.";
+        } else {
+          let buildAttachmentClient = new BuildAttachmentClient(build);
+          buildAttachmentClient
+            .init()
+            .then(() => {
+              displayReports(buildAttachmentClient);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
       });
     }
   } catch (error) {
@@ -28,23 +37,17 @@ SDK.ready().then(() => {
 });
 
 function displayReports(attachmentClient: BuildAttachmentClient) {
-  console.log("fetching attachments");
   let attachments = attachmentClient.fetchAttachments();
-  console.log(attachments);
-  console.log("finding index.hmtl");
-  let indexAttachment = attachments.find(x => x.name == "aW5kZXguaHRtbA==.html");
-  console.log(indexAttachment);
-  console.log("ready");
-  console.log("downloading content");
-  attachmentClient.downloadAttachment(indexAttachment).then((content) => {
-    console.log(content);
-  
-    ReactDOM.render(
-      <AllureTab htmlContent={content} />,
-      document.getElementById("allure-extension-container")
-    );
-    document.getElementById("allure-extension-message").style.display = "none";
-  });
+  let indexAttachment = attachments.find((x) => x.name == "index.html");
+  if (indexAttachment) {
+    attachmentClient.downloadAttachment(indexAttachment).then((content) => {
+      var newDoc = document.open("text/html", "replace");
+      newDoc.write(content);
+      newDoc.close();
+    });
+  } else {
+    document.getElementById("progress-message").innerText = "Failed to fetch report.";
+  }
 }
 
 class BuildAttachmentClient {
@@ -56,7 +59,7 @@ class BuildAttachmentClient {
     this.build = build;
   }
 
-  public async init(){
+  public async init() {
     this.attachments = await this.getAttachments();
   }
 
@@ -91,7 +94,7 @@ class BuildAttachmentClient {
     }
     return this.authHeaders;
   }
-  
+
   public async downloadAttachment(attachment: Attachment): Promise<string> {
     const headers = await this.getAuthHeaders();
     console.log("downloading:");
@@ -100,7 +103,7 @@ class BuildAttachmentClient {
     if (!response.ok) {
       throw new Error(response.statusText);
     }
-  
+
     console.log("repsonse");
     console.log(response);
     return await response.text();

@@ -35,7 +35,6 @@
     "src"
   ],
   "files": [
-    "src/AllureReportTab/tabContent.tsx",
-    "src/AllureReportTab/AllureTab.tsx"
+    "src/AllureReportTab/tabContent.tsx"
   ]
 }
