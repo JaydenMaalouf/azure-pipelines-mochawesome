@@ -1,12 +1,5 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom";
 import * as SDK from "azure-devops-extension-sdk";
-import {
-  Attachment,
-  Build,
-  BuildRestClient,
-  BuildStatus,
-} from "azure-devops-extension-api/Build";
+import { Attachment, Build, BuildRestClient, BuildStatus } from "azure-devops-extension-api/Build";
 import { getClient } from "azure-devops-extension-api";
 
 SDK.init();
@@ -17,8 +10,9 @@ SDK.ready().then(() => {
       config.onBuildChanged(async (build: Build) => {
         if (build.status == BuildStatus.InProgress) {
           document.getElementById("spinner").style.display = "none";
-          document.getElementById("progress-message").innerText = "Pipeline in progress, please wait.";
+          document.getElementById("progress-message").innerText = "Pipeline in progress, please wait until it's complete.";
         } else {
+          document.getElementById("progress-message").innerText = "Fetching Allure Report..";
           let buildAttachmentClient = new BuildAttachmentClient(build);
           buildAttachmentClient
             .init()

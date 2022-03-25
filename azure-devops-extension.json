@@ -2,17 +2,29 @@
   "manifestVersion": 1,
   "id": "allure-reporter",
   "publisher": "JaydenMaalouf",
-  "version": "1.0.81",
+  "version": "1.0.83",
   "name": "Allure Reporter",
-  "description": "Azure DevOps Extension",
+  "description": "Install and run Allure Generate directly in Azure DevOps and view the results in the build.",
+  "icons": {
+    "default": "images/icon.png",
+    "large": "images/icon.png"
+  },
   "categories": [
     "Azure Pipelines"
+  ],
+  "Tags": [
+    "Allure",
+    "Reporting",
+    "Generate",
+    "HTML",
+    "Tab",
+    "DevOps"
   ],
   "targets": [
     {
       "id": "Microsoft.VisualStudio.Services"
     }
-  ],  
+  ],
   "scopes": [
     "vso.build_execute"
   ],
@@ -28,6 +40,10 @@
       "addressable": true
     }
   ],
+  "repository": {
+    "type": "git",
+    "uri": "https://github.com/JaydenMaalouf/azure-pipelines-allure"
+  },
   "contributions": [
     {
       "id": "pipeline-allure-tab",

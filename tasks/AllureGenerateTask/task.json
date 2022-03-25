@@ -3,7 +3,7 @@
   "id": "2f1fb45f-1828-460a-8f2e-ec5c31c36241",
   "name": "AllureGenerateTask",
   "friendlyName": "Allure Generate Report Task",
-  "description": "Used to upload the Allure HTML Report to Azure DevOps",
+  "description": "Generate an Allure Report export and view the output in Azure DevOps",
   "helpMarkDown": "",
   "category": "Utility",
   "author": "Jayden Maalouf",
@@ -12,7 +12,7 @@
     "Minor": 1,
     "Patch": 58
   },
-  "instanceNameFormat": "echo $(samplestring)",
+  "instanceNameFormat": "Allure Generator",
   "inputs": [
     {
       "name": "workingDirectory",
