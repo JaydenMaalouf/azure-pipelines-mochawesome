@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "allure-reporter",
   "publisher": "JaydenMaalouf",
-  "version": "1.0.83",
+  "version": "1.0.90",
   "name": "Allure Reporter",
   "description": "Install and run Allure Generate directly in Azure DevOps and view the results in the build.",
   "icons": {

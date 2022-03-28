@@ -109,13 +109,12 @@ export class AllureGenerator {
     });
     task.debug("Done filling link tags.");
 
-    let outputPath = path.join(this.outputDirectory, "complete.html");
-    task.writeFile(outputPath, soup.prettify());
-    task.debug(`> Saving result as ${outputPath}`);
+    task.writeFile(this.outputDirectory, soup.prettify());
+    task.debug(`> Saving result as ${this.outputDirectory}`);
 
-    let outputStats = task.stats(outputPath);
+    let outputStats = task.stats(this.outputDirectory);
     task.debug(`Done. Complete file size is:${outputStats.size}`);
-    return outputPath;
+    return this.outputDirectory;
   }
 
   private generateServerJs(serverJsPath: string, data: any[]) {

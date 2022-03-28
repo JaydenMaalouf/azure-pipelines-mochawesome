@@ -10,7 +10,7 @@
   "version": {
     "Major": 0,
     "Minor": 1,
-    "Patch": 58
+    "Patch": 65
   },
   "instanceNameFormat": "Allure Generator",
   "inputs": [
@@ -23,11 +23,19 @@
       "required": false
     },
     {
+      "name": "reportDirectory",
+      "type": "filePath",
+      "label": "Report directory",
+      "defaultValue": "$(System.DefaultWorkingDirectory)/allure-report",
+      "helpMarkDown": "Directory to push the generated Allure export to. The default value is $(System.DefaultWorkingDirectory)/allure-report",
+      "required": false
+    },
+    {
       "name": "outputDirectory",
       "type": "filePath",
       "label": "Output directory",
-      "defaultValue": "$(System.DefaultWorkingDirectory)/allure-report",
-      "helpMarkDown": "Directory to push the generated Allure export to. The default value is $(System.DefaultWorkingDirectory)/allure-report",
+      "defaultValue": "$(System.DefaultWorkingDirectory)/complete.html",
+      "helpMarkDown": "Directory to push the generated Allure HTML. The default value is $(System.DefaultWorkingDirectory)/complete.html",
       "required": false
     },
     {
@@ -37,6 +45,49 @@
       "defaultValue": true,
       "helpMarkDown": "Publish Allure Test results to Azure DevOps",
       "required": false
+    },
+    {
+      "name": "testResultsDirectory",
+      "type": "filePath",
+      "label": "Test Results directory",
+      "defaultValue": "$(System.DefaultWorkingDirectory)",
+      "visibleRule": "publishResults = true",
+      "helpMarkDown": "Directory to publish the test results from. The default value is $(System.DefaultWorkingDirectory)",
+      "required": false
+    },
+    {
+        "name": "runTitle",
+        "type": "string",
+        "label": "Test Result Run Title",
+        "defaultValue": "Allure Results",
+        "visibleRule": "publishResults = true",
+        "helpMarkDown": "Used to seperate the results in the Test Results viewer. The default value is 'Allure Results'",
+        "required": false
+    },
+    {
+        "name": "resultFilesFilter",
+        "type": "multiLine",
+        "label": "Result Files Filter",
+        "defaultValue": "**/*.xml",
+        "required": false,
+        "visibleRule": "publishResults = true",
+        "helpMarkDown": "Used to filter the results files passed to the Publish Test Results. The default value is **/*.xml"
+    },
+    {
+      "name": "testReporter",
+      "type": "pickList",
+      "label": "Unit Test Reporter",
+      "defaultValue": "JUnit",
+      "helpMarkDown": "Which Test Reporter to use when publishing Tests to Azure DevOps. The default value is 'JUnit'",
+      "visibleRule": "publishResults = true",
+      "required": false,
+      "options": {
+        "JUnit": "JUnit",
+        "NUnit": "NUnit",
+        "VSTest": "VSTest",
+        "xUnit": "xUnit",
+        "cTest": "cTest"
+      }
     }
   ],
   "execution": {
