@@ -1,10 +1,10 @@
 {
   "manifestVersion": 1,
-  "id": "allure-reporter",
+  "id": "mochawesome-reporter",
   "publisher": "JaydenMaalouf",
-  "version": "1.0.90",
-  "name": "Allure Reporter",
-  "description": "Install and run Allure Generate directly in Azure DevOps and view the results in the build.",
+  "version": "1.0.4",
+  "name": "Mochawesome Reporter",
+  "description": "Install and publish Mochawesome results directly in Azure DevOps and view the output in the build.",
   "icons": {
     "default": "images/icon.png",
     "large": "images/icon.png"
@@ -13,7 +13,7 @@
     "Azure Pipelines"
   ],
   "Tags": [
-    "Allure",
+    "Mochawesome",
     "Reporting",
     "Generate",
     "HTML",
@@ -30,10 +30,10 @@
   ],
   "files": [
     {
-      "path": "tasks/AllureGenerateTask"
+      "path": "tasks/MochawesomePublishTask"
     },
     {
-      "path": "tasks/AllureInstallTask"
+      "path": "tasks/MochawesomeInstallTask"
     },
     {
       "path": "dist",
@@ -42,44 +42,44 @@
   ],
   "repository": {
     "type": "git",
-    "uri": "https://github.com/JaydenMaalouf/azure-pipelines-allure"
+    "uri": "https://github.com/JaydenMaalouf/azure-pipelines-mochawesome"
   },
   "contributions": [
     {
-      "id": "pipeline-allure-tab",
+      "id": "pipeline-mochawesome-tab",
       "type": "ms.vss-build-web.build-results-tab",
-      "description": "Embed Allure HTML report in Azure Pipelines Build",
+      "description": "Embed Mochawesome HTML report in Azure Pipelines Build",
       "targets": [
         "ms.vss-build-web.build-results-view"
       ],
       "properties": {
-        "name": "Allure",
-        "uri": "dist/AllureReportTab/tabContent.html",
+        "name": "Mochawesome",
+        "uri": "dist/MochawesomeReportTab/tabContent.html",
         "registeredObjectId": "registerBuild",
         "supportsTasks": [
-          "2f1fb45f-1828-460a-8f2e-ec5c31c36241"
+          "53df1fea-fbb7-4363-9fcb-5dd4a0010458"
         ],
         "dynamic": true
       }
     },
     {
-      "id": "AllureGenerateTask",
+      "id": "MochawesomePublishTask",
       "type": "ms.vss-distributed-task.task",
       "targets": [
         "ms.vss-distributed-task.tasks"
       ],
       "properties": {
-        "name": "tasks/AllureGenerateTask"
+        "name": "tasks/MochawesomePublishTask"
       }
     },
     {
-      "id": "AllureInstallTask",
+      "id": "MochawesomeInstallTask",
       "type": "ms.vss-distributed-task.task",
       "targets": [
         "ms.vss-distributed-task.tasks"
       ],
       "properties": {
-        "name": "tasks/AllureInstallTask"
+        "name": "tasks/MochawesomeInstallTask"
       }
     }
   ]

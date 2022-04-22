@@ -1,18 +1,18 @@
 {
   "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
-  "id": "0d6fcf3a-3a59-419c-8fed-5074acaf4699",
-  "name": "AllureInstallTask",
-  "friendlyName": "Allure Commandline Installer Task",
-  "description": "Install the Allure Commandline before running the Generate task to ensure it exists.",
+  "id": "0646fa75-7d82-464b-ab6c-1c64a1cc30cc",
+  "name": "MochawesomeInstallTask",
+  "friendlyName": "Mochawesome Commandline Installer Task",
+  "description": "Install the Mochawesome Commandline before running the Generate task to ensure it exists.",
   "helpMarkDown": "",
   "category": "Utility",
   "author": "Jayden Maalouf",
   "version": {
     "Major": 0,
     "Minor": 1,
-    "Patch": 8
+    "Patch": 2
   },
-  "instanceNameFormat": "Allure Install",
+  "instanceNameFormat": "Mochawesome Install",
   "execution": {
     "Node10": {
       "target": "src/index.js"

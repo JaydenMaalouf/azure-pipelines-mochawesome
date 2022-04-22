@@ -12,11 +12,11 @@ async function run() {
     }
 
     const npmRunner: ToolRunner = new ToolRunner(npmPath);
-    npmRunner.arg(["install", "-g", "allure-commandline"]);
+    npmRunner.arg(["install", "-g", "mochawesome", "mochawesome-report-generator"]);
 
     const result = await npmRunner.exec();
     if (result == 0) {
-      task.setResult(TaskResult.Succeeded, "");
+      task.setResult(TaskResult.Succeeded, "Successfully installed mochawesome");
       return;
     }
 

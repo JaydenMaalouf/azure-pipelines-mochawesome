@@ -1,45 +1,21 @@
-import path = require("path");
 import task = require("azure-pipelines-task-lib/task");
 import { TaskResult, FindOptions } from "azure-pipelines-task-lib/task";
-import { IExecOptions } from "azure-pipelines-task-lib/toolrunner";
-import { AllureGenerator } from "./allure";
-import { report } from "process";
+import { MochawesomeGenerator } from "./generator";
 
 async function run() {
-  let allurePath: string;
-  try {
-    allurePath = task.which("allure", true);
-  } catch (err) {
-    throw "Allure Commandline not found.";
-  }
-
-  const allureTool = task.tool(allurePath);
-  const workingDirectory = task.getPathInput("workingDirectory");
   const reportDirectory = task.getPathInput("reportDirectory");
-  allureTool.arg(["generate"]);
-  allureTool.argIf(workingDirectory, workingDirectory);
-  allureTool.argIf(reportDirectory, ["-o", reportDirectory]);
-
-  const result = await allureTool.exec();
-  if (result != 0) {
-    throw `Allure Generation failed with Exit Code: ${result}`;
-  }
-
   const outputDirectory = task.getPathInput("outputDirectory");
   if (outputDirectory) {
-    const allureGen = new AllureGenerator(reportDirectory, outputDirectory);
-    //TODO: set this to staging artifacts directory
-    task.debug("Starting allure generation");
-    const outputFile = allureGen.generate();
+    const mochGen = new MochawesomeGenerator(reportDirectory, outputDirectory);
+    task.debug("Generating output");
+    const outputFile = mochGen.generate();
     console.log(`Output file generated: ${outputFile}`);
-    task.addAttachment("allure.report", "index.html", outputFile);
+    task.addAttachment("mochawesome.report", "index.html", outputFile);
   }
-
-  const artifactName = task.getInput("");
-  task.uploadArtifact(artifactName, reportDirectory, artifactName);
 
   const shouldPublish = task.getBoolInput("publishResults");
   if (shouldPublish) {
+    console.log(`Publishing test results`);
     const testReporter = task.getInput("testReporter");
     const testPublisher = new task.TestPublisher(testReporter);
 
@@ -63,7 +39,7 @@ async function run() {
 
 run()
   .then(() => {
-    task.setResult(TaskResult.Succeeded, "");
+    task.setResult(TaskResult.Succeeded, "Mochawesome Report Generated Successfully");
   })
   .catch((error) => {
     task.setResult(TaskResult.Failed, error);

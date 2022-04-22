@@ -1,7 +1,7 @@
 {
-  "name": "allure-reporter",
-  "version": "1.0.1",
-  "description": "Allure Reporter",
+  "name": "mochawesome-reporter",
+  "version": "1.0.0",
+  "description": "Mochawesome Reporter",
   "keywords": [
     "extensions",
     "Azure DevOps",
@@ -15,7 +15,7 @@
   "scripts": {
     "clean": "rimraf ./dist",
     "compile": "npm run clean && npm run test && webpack --mode production && npm run compile:tasks",
-    "compile:tasks": "tsc -b ./tasks/AllureGenerateTask/tsconfig.json ./tasks/AllureInstallTask/tsconfig.json",
+    "compile:tasks": "tsc -b ./tasks/MochawesomePublishTask/tsconfig.json ./tasks/MochawesomeInstallTask/tsconfig.json",
     "compile:dev": "npm run clean && npm run test && webpack --mode development",
     "build": "npm run compile",
     "build:dev": "npm run compile:dev && npm run postbuild",

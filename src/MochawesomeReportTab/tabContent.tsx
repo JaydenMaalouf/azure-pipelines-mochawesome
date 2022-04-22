@@ -12,7 +12,7 @@ SDK.ready().then(() => {
           document.getElementById("spinner").style.display = "none";
           document.getElementById("progress-message").innerText = "Pipeline in progress, please wait until it's complete.";
         } else {
-          document.getElementById("progress-message").innerText = "Fetching Allure Report..";
+          document.getElementById("progress-message").innerText = "Fetching Mochawesome Report..";
           let buildAttachmentClient = new BuildAttachmentClient(build);
           buildAttachmentClient
             .init()
@@ -63,7 +63,7 @@ class BuildAttachmentClient {
     return await buildClient.getAttachments(
       this.build.project.id,
       this.build.id,
-      "allure.report"
+      "mochawesome.report"
     );
   }
 

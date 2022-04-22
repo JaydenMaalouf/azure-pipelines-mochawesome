@@ -35,6 +35,6 @@
     "src"
   ],
   "files": [
-    "src/AllureReportTab/tabContent.tsx"
+    "src/MochawesomeReportTab/tabContent.tsx"
   ]
 }

@@ -3,10 +3,10 @@ import path = require("path");
 import task = require("azure-pipelines-task-lib/task");
 import JSSoup from "jssoup";
 
-export class AllureGenerator {
+export class MochawesomeGenerator {
   private workingDirectory: string;
   private outputDirectory: string;
-  private required_files = ["index.html", "app.js", "styles.css"];
+  private required_files = ["default.html", "default.json"];
   private default_content_type = "text/plain;charset=UTF-8";
   private base64_extensions = ["png", "jpeg", "jpg", "gif", "html", "htm"];
   private content_types = {
@@ -56,45 +56,47 @@ export class AllureGenerator {
     task.cp(path.join(__dirname, "sinon.js"), sinonOutputPath);
     task.debug("The sinon.js has been copied");
 
-    let indexPath = path.join(this.workingDirectory, "index.html");
+    let indexPath = path.join(this.workingDirectory, "default.html");
     let htmlContent = fs.readFileSync(indexPath, "utf-8");
     if (!htmlContent.includes("sinon.js")) {
       task.debug(
-        "> Patching index.html file to make it use sinon.js and server.js"
+        "> Patching default.html file to make it use sinon.js and server.js"
       );
       htmlContent = htmlContent.replace(
         `<script src="app.js"></script>`,
         `<script src="sinon.js"></script><script src="server.js"></script><script src="app.js"></script>`
       );
       task.debug(
-        "> Saving patched index.html file, so It can be opened without --allow-file-access-from-files"
+        "> Saving patched default.html file, so It can be opened without --allow-file-access-from-files"
       );
       task.writeFile(indexPath, htmlContent);
     } else {
-      task.debug("> Skipping patching of index.html as it's already patched");
+      task.debug("> Skipping patching of default.html as it's already patched");
     }
 
-    task.debug("> Parsing index.html");
+    task.debug("> Parsing default.html");
     let soup = new JSSoup(htmlContent);
 
     task.debug("> Filling script tags with real files contents");
     let scriptTags = soup.findAll("script");
     scriptTags.forEach((tag) => {
-      task.debug(`Hey, a script! (${tag})`);
-      let filePath = path.join(this.workingDirectory, tag.attrs.src);
-      task.debug(`...${tag}${filePath}`);
-      let fileContent = fs.readFileSync(filePath, "utf-8");
-      let tagSoup = new JSSoup("<script></script>");
-      let fullScriptTag = tagSoup.nextElement;
-      fullScriptTag.insert(0, fileContent);
-      tag.replaceWith(fullScriptTag);
+      if (tag.attrs.src) {
+        task.debug(`Hey, a script! (${tag})`);
+        let filePath = path.join(this.workingDirectory, tag.attrs.src);
+        task.debug(`...${tag}${filePath}`);
+        let fileContent = fs.readFileSync(filePath, "utf-8");
+        let tagSoup = new JSSoup("<script></script>");
+        let fullScriptTag = tagSoup.nextElement;
+        fullScriptTag.insert(0, fileContent);
+        tag.replaceWith(fullScriptTag);
+      }
     });
     task.debug("Done filling script tags.");
 
     task.debug("> Replacing link tags with style tags with real file contents");
     let linkTags = soup.findAll("link");
     linkTags.forEach((tag) => {
-      if (tag.attrs.rel == "stylesheet") {
+      if (tag.attrs.rel == "stylesheet" && tag.attrs.href) {
         task.debug(`Hey, a link! (${tag})`);
         let filePath = path.join(this.workingDirectory, tag.attrs.href);
         task.debug(`...${tag}${filePath}`);
@@ -183,7 +185,10 @@ export class AllureGenerator {
       fs.appendFileSync(serverJsPath, ` "${url}": "${content}", \n`);
     });
     fs.appendFileSync(serverJsPath, "};\n");
-    fs.appendFileSync(serverJsPath, "\nvar server = sinon.fakeServer.create();\n");
+    fs.appendFileSync(
+      serverJsPath,
+      "\nvar server = sinon.fakeServer.create();\n"
+    );
     data.forEach((element) => {
       let url = element.url;
       let contentType = element.mime;
@@ -206,7 +211,7 @@ export class AllureGenerator {
       files.forEach((file) => {
         let dirName = path.dirname(file);
         task.debug(`dirName = ${dirName}`);
-        if (path.dirname(file) == this.workingDirectory){
+        if (path.dirname(file) == this.workingDirectory) {
           return;
         }
 
@@ -225,7 +230,8 @@ export class AllureGenerator {
         }
 
         let content: string;
-        let mime = this.content_types[fileExtension] ?? this.default_content_type;
+        let mime =
+          this.content_types[fileExtension] ?? this.default_content_type;
         task.debug(`mime = ${mime}`);
         let isBinaryFile = this.base64_extensions.includes(fileExtension);
         task.debug(`isBinaryFile = ${isBinaryFile}`);
@@ -237,7 +243,14 @@ export class AllureGenerator {
           content = fileContent;
         }
 
-        data.push(new DataFile(relativeFile.replace(/\\/g, "/"), mime, content, isBinaryFile));
+        data.push(
+          new DataFile(
+            relativeFile.replace(/\\/g, "/"),
+            mime,
+            content,
+            isBinaryFile
+          )
+        );
       });
     }
     return data;
